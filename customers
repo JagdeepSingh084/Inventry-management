@@ -11,6 +11,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import net.proteanit.sql.DbUtils;
 
 /**
  *
@@ -24,7 +26,7 @@ public class customer extends javax.swing.JFrame {
 
     public customer() {
         initComponents();
-        //selectCust();
+        SelectCust();
     }
 
     /**
@@ -296,27 +298,21 @@ public class customer extends javax.swing.JFrame {
     }                                    
 
     
-    /*public void SelectCust()
+    public void SelectCust()
     {
         try
         {
          con= DriverManager.getConnection("jdbc:mysql://localhost:3306/db","root","ansh@#16V");
          st=con.createStatement();
          rs=st.executeQuery("select * from customertbl");
-         // Convert ResultSet to XML using rs2xml
-            String xmlData = rs2xml.convertResultSetToXML(rs);
 
-            // Load the XML data into a DefaultTableModel
-            DefaultTableModel model = convertXMLToTableModel(xmlData);
-            customertbl.setModel(model);
-
-         //customertbl.setModel(DbUtils.resultSetToTableModel(rs));   
+        customertbl.setModel(DbUtils.resultSetToTableModel(rs));   
         }
          catch(SQLException e)
         {
-           e.printStackTree();
+           e.printStackTrace();
         }
-    }*/
+    }
     private void addbtnMouseClicked(java.awt.event.MouseEvent evt) {                                    
         // TODO add your handling code here:
          try{
@@ -335,7 +331,7 @@ public class customer extends javax.swing.JFrame {
             int row=add.executeUpdate();
             JOptionPane.showMessageDialog(this,"Customer Successfully added");
             con.close();
-            //SelectCust();
+            SelectCust();
         }
         catch(SQLException e)
         {
@@ -345,11 +341,11 @@ public class customer extends javax.swing.JFrame {
 
     private void customertblMouseClicked(java.awt.event.MouseEvent evt) {                                         
         // TODO add your handling code here:
-        //DefaultTableModel model=(DefaultTableModel)customertbl.getModel();
-        //int myindex = customertbl.getSelectedRow();
-        //CustId.setText(model.getValueAt(myindex,0).toString());
-       // CustName.setText(model.getValueAt(myindex,1).toString());
-        //CustPhone.setText(model.getValueAt(myindex,2).toString());
+        DefaultTableModel model=(DefaultTableModel)customertbl.getModel();
+        int myindex = customertbl.getSelectedRow();
+        CustId.setText(model.getValueAt(myindex,0).toString());
+        CustName.setText(model.getValueAt(myindex,1).toString());
+        CustPhone.setText(model.getValueAt(myindex,2).toString());
 
     }                                        
 
@@ -366,7 +362,7 @@ public class customer extends javax.swing.JFrame {
                String Query="delete from db.customertbl where CustId="+id;
                Statement add=con.createStatement();
                add.executeUpdate(Query);
-               //SelectCust();
+               SelectCust();
                JOptionPane.showMessageDialog(this,"Customer Deleted Successfully");
             }catch(SQLException e)
             {
@@ -387,7 +383,7 @@ public class customer extends javax.swing.JFrame {
                 Statement add=con.createStatement();
                 add.executeUpdate(UpdateQuery);
                 JOptionPane.showMessageDialog(this,"Customer Updated");
-                //SelectCust();
+                SelectCust();
             }catch(SQLException e)
             {
                 e.printStackTrace();
