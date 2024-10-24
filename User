@@ -11,6 +11,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import net.proteanit.sql.DbUtils;
 
 /**
  *
@@ -25,32 +27,25 @@ public class user extends javax.swing.JFrame {
     Statement st=null;
     ResultSet rs=null;
     
-   /* public void Selectuser()
+    public void Selectuser()
     {
         try
         {
          con= DriverManager.getConnection("jdbc:mysql://localhost:3306/db","root","ansh@#16V");
          st=con.createStatement();
          rs=st.executeQuery("select * from usertbl");
-         // Convert ResultSet to XML using rs2xml
-            String xmlData = rs2xml.convertResultSetToXML(rs);
-
-            // Load the XML data into a DefaultTableModel
-            DefaultTableModel model = convertXMLToTableModel(xmlData);
-            usertbl.setModel(model);
-
-         //usertbl.setModel(DbUtils.resultSetToTableModel(rs));   
+         usertbl.setModel(DbUtils.resultSetToTableModel(rs));   
         }
          catch(SQLException e)
         {
-           e.printStackTree();
+           e.printStackTrace();
         }
 
-    }*/
+    }
 
     public user() {
         initComponents();
-      //  Selectuser();
+       Selectuser();
     }
 
     /**
@@ -348,7 +343,7 @@ public class user extends javax.swing.JFrame {
             int row=add.executeUpdate();
             JOptionPane.showMessageDialog(this,"user Successfully added");
             con.close();
-            //Selectuser();
+            Selectuser();
         }
         catch(SQLException e)
         {
@@ -370,7 +365,7 @@ public class user extends javax.swing.JFrame {
                 Statement add=con.createStatement();
                 add.executeUpdate(UpdateQuery);
                 JOptionPane.showMessageDialog(this,"User Updated");  
-               // Selectuser();
+               Selectuser();
             }catch(SQLException e)
             {
                 e.printStackTrace();
@@ -391,8 +386,8 @@ public class user extends javax.swing.JFrame {
                String Query="delete from usertbl where uphone="+"'"+id+"'";
                Statement add=con.createStatement();
                add.executeUpdate(Query);
-               //SelectCust();
-               JOptionPane.showMessageDialog(this,"Customer Deleted Successfully");
+               Selectuser();
+               JOptionPane.showMessageDialog(this,"User Deleted Successfully");
             }catch(SQLException e)
             {
                 e.printStackTrace();
@@ -402,11 +397,11 @@ public class user extends javax.swing.JFrame {
 
     private void usertblMouseClicked(java.awt.event.MouseEvent evt) {                                     
         // TODO add your handling code here:
-         //DefaultTableModel model=(DefaultTableModel)usertbl.getModel();
-        //int myindex = usertbl.getSelectedRow();
-        //uname.setText(model.getValueAt(myindex,0).toString());
-       // upass.setText(model.getValueAt(myindex,1).toString());
-        //uphone.setText(model.getValueAt(myindex,2).toString());
+        DefaultTableModel model=(DefaultTableModel)usertbl.getModel();
+        int myindex = usertbl.getSelectedRow();
+        uname.setText(model.getValueAt(myindex,0).toString());
+        upass.setText(model.getValueAt(myindex,1).toString());
+        uphone.setText(model.getValueAt(myindex,2).toString());
 
     }                                    
 
