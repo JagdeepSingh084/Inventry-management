@@ -4,9 +4,11 @@
  */
 package inventorymanagement;
 //import javax.swing.table.DefaultTableModel; 
+
 import javax.swing.*;
 import java.sql.*;
-import javax.swing.table.DefaultTableModel ;
+import javax.swing.table.DefaultTableModel;
+import net.proteanit.sql.DbUtils;
 
 /**
  *
@@ -19,35 +21,30 @@ public class product extends javax.swing.JFrame {
      */
     public product() {
         initComponents();
-       // SelectProd();
+         SelectProd();
     }
-     
-    Connection con=null;
-    Statement st=null;
-    ResultSet rs=null;
+
+    Connection con = null;
+    Statement st = null;
+    ResultSet rs = null;
+
     @SuppressWarnings("unchecked")
-    
-   /* public void SelectProd()
+
+     public void SelectProd()
     {
         try
         {
          con= DriverManager.getConnection("jdbc:mysql://localhost:3306/db","root","ansh@#16V");
          st=con.createStatement();
          rs=st.executeQuery("select * from producttbl");
-         // Convert ResultSet to XML using rs2xml
-            String xmlData = rs2xml.convertResultSetToXML(rs);
-
-            // Load the XML data into a DefaultTableModel
-            DefaultTableModel model =convertXMLToTableModel(xmlData);
-            ProductTable.setModel(model);
-
-        // producttbl.setModel(DbUtils.resultSetToTableModel(rs));   
+         ProductTable.setModel(DbUtils.resultSetToTableModel(rs));
         }
          catch(SQLException e)
         {
            e.printStackTrace();
         }
-    }*/
+ 
+    }
     // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
 
@@ -357,49 +354,42 @@ public class product extends javax.swing.JFrame {
 
     private void AddBtnMouseClicked(java.awt.event.MouseEvent evt) {                                    
         // TODO add your handling code here:
-        try{
-            Class.forName("com.mysql.jdbc.Driver");
-        }
-        catch(ClassNotFoundException e)
-        {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
             System.out.println("not found");
         }
-        try{
-            con=DriverManager.getConnection("jdbc:mysql://localhost:3306/db","root","ansh@#16V");
-            PreparedStatement add=con.prepareStatement("insert into producttbl values(?,?,?,?,?)");
-            add.setInt(1,Integer.valueOf(ProdId.getText()));
-            add.setString(2,ProdName.getText());
-            add.setInt(3,Integer.valueOf(ProdQty.getText()));
-            add.setString(4,ProdDesc.getText());
-            add.setString(5,CatCb.getSelectedItem().toString());
-            int row=add.executeUpdate();
-            JOptionPane.showMessageDialog(this,"Product Successfully added");
+        try {
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/db", "root", "ansh@#16V");
+            PreparedStatement add = con.prepareStatement("insert into producttbl values(?,?,?,?,?)");
+            add.setInt(1, Integer.valueOf(ProdId.getText()));
+            add.setString(2, ProdName.getText());
+            add.setInt(3, Integer.valueOf(ProdQty.getText()));
+            add.setString(4, ProdDesc.getText());
+            add.setString(5, CatCb.getSelectedItem().toString());
+            int row = add.executeUpdate();
+            JOptionPane.showMessageDialog(this, "Product Successfully added");
             con.close();
-            //SelectProd();
-        }
-        catch(SQLException e)
-        {
+            SelectProd();
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }                                   
 
     private void deleteBtnMouseClicked(java.awt.event.MouseEvent evt) {                                       
         // TODO add your handling code here:
-        if(ProdId.getText().isEmpty())
-        {
-            JOptionPane.showMessageDialog(this,"Enter The Product To Be Deleted ");
-        }
-        else{
-            try{
-               con=DriverManager.getConnection("jdbc:mysql://localhost:3306/db","root","ansh@#16V");
-               String id=ProdId.getText();
-               String Query="delete from db.producttbl where ProdId="+id;
-               Statement add=con.createStatement();
-               add.executeUpdate(Query);
-               //SelectProd();
-               JOptionPane.showMessageDialog(this,"Product Deleted Successfully");
-            }catch(SQLException e)
-            {
+        if (ProdId.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Enter The Product To Be Deleted ");
+        } else {
+            try {
+                con = DriverManager.getConnection("jdbc:mysql://localhost:3306/db", "root", "ansh@#16V");
+                String id = ProdId.getText();
+                String Query = "delete from db.producttbl where ProdId=" + id;
+                Statement add = con.createStatement();
+                add.executeUpdate(Query);
+                SelectProd();
+                JOptionPane.showMessageDialog(this, "Product Deleted Successfully");
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
@@ -412,30 +402,28 @@ public class product extends javax.swing.JFrame {
         ProdId.setText(model.getValueAt(myindex,0).toString());
         ProdName.setText(model.getValueAt(myindex,1).toString());
         ProdQty.setText(model.getValueAt(myindex,2).toString());
-        ProdDesc.setText(model.getValueAt(myindex,3).toString());
+      ProdDesc.setText(model.getValueAt(myindex,3).toString());
+
     }                                         
 
     private void jLabel9MouseClicked(java.awt.event.MouseEvent evt) {                                     
         // TODO add your handling code here:
         System.exit(0);
-        
+
     }                                    
 
     private void updatebtnMouseClicked(java.awt.event.MouseEvent evt) {                                       
         // TODO add your handling code here:
-        if(ProdId.getText().isEmpty()||ProdName.getText().isEmpty()||ProdQty.getText().isEmpty()||ProdDesc.getText().isEmpty())
-        {
-            JOptionPane.showMessageDialog(this,"Missing Information");  
-        }
-        else{
-            try{
-                String UpdateQuery="update producttbl set ProdName='"+ProdName.getText()+"'"+",ProdQty="+ProdQty.getText()+""+",ProdDesc='"+ProdDesc.getText()+"'"+",ProdCat='"+CatCb.getSelectedItem().toString()+"'"+"where ProdId="+ProdId.getText();
-                Statement add=con.createStatement();
+        if (ProdId.getText().isEmpty() || ProdName.getText().isEmpty() || ProdQty.getText().isEmpty() || ProdDesc.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Missing Information");
+        } else {
+            try {
+                String UpdateQuery = "update producttbl set ProdName='" + ProdName.getText() + "'" + ",ProdQty=" + ProdQty.getText() + "" + ",ProdDesc='" + ProdDesc.getText() + "'" + ",ProdCat='" + CatCb.getSelectedItem().toString() + "'" + "where ProdId=" + ProdId.getText();
+                Statement add = con.createStatement();
                 add.executeUpdate(UpdateQuery);
-                JOptionPane.showMessageDialog(this,"Product Updated");
-                //SelectProd();
-            }catch(SQLException e)
-            {
+                JOptionPane.showMessageDialog(this, "Product Updated");
+                SelectProd();
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
