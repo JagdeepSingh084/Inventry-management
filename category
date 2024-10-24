@@ -11,6 +11,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import net.proteanit.sql.DbUtils;
 
 /**
  *
@@ -28,7 +30,7 @@ public class category extends javax.swing.JFrame {
 
     public category() {
         initComponents();
-        //SelectCat();
+        SelectCat();
     }
 
     /**
@@ -279,27 +281,21 @@ public class category extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>                        
 
-    /*public void SelectCat()
+    public void SelectCat()
     {
         try
         {
          con= DriverManager.getConnection("jdbc:mysql://localhost:3306/db","root","ansh@#16V");
          st=con.createStatement();
          rs=st.executeQuery("select * from producttbl");
-         // Convert ResultSet to XML using rs2xml
-            String xmlData = rs2xml.convertResultSetToXML(rs);
 
-            // Load the XML data into a DefaultTableModel
-            DefaultTableModel model = convertXMLToTableModel(xmlData);
-            Categorytbl.setModel(model);
-
-         //Categorytbl.setModel(DbUtils.resultSetToTableModel(rs));   
+         Categorytbl.setModel(DbUtils.resultSetToTableModel(rs));   
         }
          catch(SQLException e)
         {
-           e.printStackTree();
+           e.printStackTrace();
         }
-    }*/
+    }
     private void addbtnMouseClicked(java.awt.event.MouseEvent evt) {                                    
         // TODO add your handling code here:
         try{
@@ -317,7 +313,7 @@ public class category extends javax.swing.JFrame {
             int row=add.executeUpdate();
             JOptionPane.showMessageDialog(this,"category Successfully added");
             con.close();
-            //SelectCat();
+            SelectCat();
         }
         catch(SQLException e)
         {
@@ -327,10 +323,10 @@ public class category extends javax.swing.JFrame {
 
     private void CategorytblMouseClicked(java.awt.event.MouseEvent evt) {                                         
         // TODO add your handling code here:
-        //DefaultTableModel model=(DefaultTableModel)Categorytbl.getModel();
-        //int myindex = Categorytbl.getSelectedRow();
-        //CatId.setText(model.getValueAt(myindex,0).toString());
-       // CatName.setText(model.getValueAt(myindex,1).toString());
+        DefaultTableModel model=(DefaultTableModel)Categorytbl.getModel();
+        int myindex = Categorytbl.getSelectedRow();
+       CatId.setText(model.getValueAt(myindex,0).toString());
+       CatName.setText(model.getValueAt(myindex,1).toString());
     }                                        
 
     private void jLabel9MouseClicked(java.awt.event.MouseEvent evt) {                                     
@@ -351,7 +347,7 @@ public class category extends javax.swing.JFrame {
                String Query="delete from db.Categorytbl where CatId="+id;
                Statement add=con.createStatement();
                add.executeUpdate(Query);
-               //SelectCat();
+               SelectCat();
                JOptionPane.showMessageDialog(this,"Category Deleted Successfully");
             }catch(SQLException e)
             {
@@ -372,7 +368,7 @@ public class category extends javax.swing.JFrame {
                 Statement add=con.createStatement();
                 add.executeUpdate(UpdateQuery);
                 JOptionPane.showMessageDialog(this,"Category Updated");  
-               // SelectCat();
+               SelectCat();
             }catch(SQLException e)
             {
                 e.printStackTrace();
